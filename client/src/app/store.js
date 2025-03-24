@@ -5,5 +5,3 @@ export const appStore=configureStore({
         auth:authReducer
     }
 })
-
-console.log("testing");
