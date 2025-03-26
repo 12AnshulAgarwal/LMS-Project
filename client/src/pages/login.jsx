@@ -10,6 +10,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+} from "@/features/api/authApi.js";
 import { useState } from "react";
 
 const login = () => {
@@ -19,6 +23,24 @@ const login = () => {
     password: "",
   });
   const [signinInput, setSignin] = useState({ email: "", password: "" });
+  const [
+    registerUser,
+    {
+      data: registeredData,
+      error: registeredError,
+      isLoading: registerIsLoading,
+      isSuccess: registerIsSuccess,
+    },
+  ] = useRegisterUserMutation();
+  const [
+    loginUser,
+    {
+      data: loginData,
+      error: loginError,
+      isLoading: loginIsLoading,
+      isSuccess: loginIsSuccess,
+    },
+  ] = useLoginUserMutation();
 
   function changeinputhandler(event, type) {
     const { name, value } = event.target;
@@ -29,10 +51,11 @@ const login = () => {
     }
   }
 
-  function handleRegistration(type) {
+  const handleRegistration = async (type) => {
     const inputData = type === "signupInput" ? signupInput : signinInput;
-    console.log(inputData);
-  }
+    const action = type === "signupInput" ? registerUser : loginUser;
+    await action(inputData);
+  };
 
   return (
     <div className="flex items-center w-full justify-center">
@@ -58,7 +81,7 @@ const login = () => {
                   value={signupInput.username}
                   onChange={(e) => changeinputhandler(e, "signupInput")}
                   placeholder="anshul"
-                  required="true"
+                  required={true}
                 />
               </div>
               <div className="space-y-1">
@@ -69,7 +92,7 @@ const login = () => {
                   value={signupInput.email}
                   onChange={(e) => changeinputhandler(e, "signupInput")}
                   placeholder="anshul@gmail.com"
-                  required="true"
+                  required={true}
                 />
               </div>
               <div className="space-y-1">
@@ -80,7 +103,7 @@ const login = () => {
                   type="password"
                   onChange={(e) => changeinputhandler(e, "signupInput")}
                   placeholder="xyz"
-                  required="true"
+                  required={true}
                 />
               </div>
             </CardContent>
@@ -108,7 +131,7 @@ const login = () => {
                   type="email"
                   onChange={(e) => changeinputhandler(e, "signinInput")}
                   placeholder="anshul@gmail.com"
-                  required="true"
+                  required={true}
                 />
               </div>
               <div className="space-y-1">
@@ -119,7 +142,7 @@ const login = () => {
                   type="password"
                   onChange={(e) => changeinputhandler(e, "signinInput")}
                   placeholder="xyz"
-                  required="true"
+                  required={true}
                 />
               </div>
             </CardContent>
