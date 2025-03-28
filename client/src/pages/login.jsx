@@ -14,11 +14,12 @@ import {
   useLoginUserMutation,
   useRegisterUserMutation,
 } from "@/features/api/authApi.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-const login = () => {
+const Login = () => {
   const [signupInput, setSignup] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
   });
@@ -54,11 +55,32 @@ const login = () => {
   const handleRegistration = async (type) => {
     const inputData = type === "signupInput" ? signupInput : signinInput;
     const action = type === "signupInput" ? registerUser : loginUser;
-    await action(inputData);
+    await action(inputData); // Unwrapping to handle possible errors better
   };
+  useEffect(() => {
+    if (registerIsSuccess && registeredData) {
+      toast.success(registeredData.message || "Signup Succesfully");
+    }
+    if (registeredError) {
+      toast.error(registeredError.data.message || "Signup Failed");
+    }
+    if (loginIsSuccess && loginData) {
+      toast.success(loginData.message || "login Succesfully");
+    }
+    if (loginError) {
+      toast.error(loginError.data.message || "login Failed");
+    }
+  }, [
+    loginIsLoading,
+    registerIsLoading,
+    loginError,
+    registeredError,
+    loginData,
+    registeredData,
+  ]);
 
   return (
-    <div className="flex items-center w-full justify-center">
+    <div className="flex items-center w-full justify-center mt-16">
       <Tabs defaultValue="signin" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="signup">Signup</TabsTrigger>
@@ -74,14 +96,13 @@ const login = () => {
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="space-y-1">
-                <Label htmlFor="username">Name</Label>
+                <Label htmlFor="name">Name</Label>
                 <Input
                   type="text"
-                  name="username"
-                  value={signupInput.username}
+                  name="name"
+                  value={signupInput.name}
                   onChange={(e) => changeinputhandler(e, "signupInput")}
                   placeholder="anshul"
-                  required={true}
                 />
               </div>
               <div className="space-y-1">
@@ -92,18 +113,16 @@ const login = () => {
                   value={signupInput.email}
                   onChange={(e) => changeinputhandler(e, "signupInput")}
                   placeholder="anshul@gmail.com"
-                  required={true}
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="username">Password</Label>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   name="password"
                   value={signupInput.password}
                   type="password"
                   onChange={(e) => changeinputhandler(e, "signupInput")}
                   placeholder="xyz"
-                  required={true}
                 />
               </div>
             </CardContent>
@@ -124,25 +143,23 @@ const login = () => {
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="space-y-1">
-                <Label htmlFor="username">Email</Label>
+                <Label htmlFor="name">Email</Label>
                 <Input
                   name="email"
                   value={signinInput.email}
                   type="email"
                   onChange={(e) => changeinputhandler(e, "signinInput")}
                   placeholder="anshul@gmail.com"
-                  required={true}
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="username">Password</Label>
+                <Label htmlFor="name">Password</Label>
                 <Input
                   name="password"
                   value={signinInput.password}
                   type="password"
                   onChange={(e) => changeinputhandler(e, "signinInput")}
                   placeholder="xyz"
-                  required={true}
                 />
               </div>
             </CardContent>
@@ -157,4 +174,4 @@ const login = () => {
     </div>
   );
 };
-export default login;
+export default Login;
