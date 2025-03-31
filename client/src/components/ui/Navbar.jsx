@@ -79,7 +79,7 @@ const Navbar = () => {
         </div>
       </div>
       <div className="flex md:hidden items-center justify-between px-4 h-full">
-        <h1 className="font-extrabold text-5xl">E-learning</h1>
+        <h1 className="font-extrabold text-3xl">E-learning</h1>
         <MobileNavbar className="h-px bg-gray-200 my-1" />
       </div>
     </div>
@@ -89,6 +89,7 @@ const Navbar = () => {
 export default Navbar;
 
 const MobileNavbar = () => {
+  const role = "instructor";
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -111,11 +112,13 @@ const MobileNavbar = () => {
           <span>Edit Profile</span>
           <p>Log out</p>
         </nav>
-        <SheetFooter>
-          <SheetClose asChild>
-            <Button type="submit">Save changes</Button>
-          </SheetClose>
-        </SheetFooter>
+        {role === "instructor" && (
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button type="submit">Save changes</Button>
+            </SheetClose>
+          </SheetFooter>
+        )}
       </SheetContent>
     </Sheet>
   );
