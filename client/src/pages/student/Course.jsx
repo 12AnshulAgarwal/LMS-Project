@@ -7,11 +7,11 @@ const Course = () => {
     <Card className="overflow-hidden rounded-lg dark:bg-gray-800 bg-white shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
       <div className="relative">
         <img
-          src="https://img-c.udemycdn.com/course/750x422/3873464_403c_3.jpg"
+          src="https://img-c.udemycdn.com/course/750x422/5528078_095a_8.jpg"
           alt="course"
-          className="w-full h-36 object-cover rounded-t-lg"
+          className="w-full h-36  object-cover rounded-t-lg"
         />
-      </div>
+      </div>  
       <CardContent className="px-5 py-4 space-y-3">
         <h1 className="hover:underline font-bold text-lg truncate">
           NextJs Complete Course in Hinglish
