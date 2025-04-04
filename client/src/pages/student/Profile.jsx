@@ -14,10 +14,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import React from "react";
+import { useLoadUserQuery } from "@/features/api/authApi";
 
 const Profile = () => {
-    const isLoading=false;
-    const enrolledCourses=[1,2];
+  const { data, isLoading } = useLoadUserQuery();
+  console.log(data);
+  const enrolledCourses = [1, 2];
   return (
     <div className="max-w-4xl mx-auto px-4 my-24">
       <h1 className="font-bold text-2xl text-center md:text-left">PROFILE</h1>
@@ -69,24 +71,33 @@ const Profile = () => {
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
-                    <Label>Name</Label>
-                    <Input type="text" placeholder="Name" className="col-span-3"></Input>
+                  <Label>Name</Label>
+                  <Input
+                    type="text"
+                    placeholder="Name"
+                    className="col-span-3"
+                  ></Input>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                    <Label>Profile Photo</Label>
-                    <Input type="file" placeholder="image/*" className="col-span-3"></Input>
+                  <Label>Profile Photo</Label>
+                  <Input
+                    type="file"
+                    placeholder="image/*"
+                    className="col-span-3"
+                  ></Input>
                 </div>
               </div>
               <DialogFooter>
-                    <Button disabled={isLoading}>
-                        {
-                            isLoading?(
-                                <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin"/>Please Wait
-                                </>
-                            ):"Save Changes"
-                        }
-                    </Button>
+                <Button disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Please Wait
+                    </>
+                  ) : (
+                    "Save Changes"
+                  )}
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -95,10 +106,11 @@ const Profile = () => {
       <div>
         <h1 className="font-medium text-lg">Courses you're enrolled in</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-5">
-            {
-                enrolledCourses.length===0?<h1>You have'nt Enrolled Yet</h1>:(
-                enrolledCourses.map((course,index)=><Course key={index}/>))
-            }
+          {enrolledCourses.length === 0 ? (
+            <h1>You have'nt Enrolled Yet</h1>
+          ) : (
+            enrolledCourses.map((course, index) => <Course key={index} />)
+          )}
         </div>
       </div>
     </div>
