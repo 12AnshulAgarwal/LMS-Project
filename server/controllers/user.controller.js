@@ -107,3 +107,24 @@ export const profile=async(req,res)=>{
    })
 }
 }
+export const editProfile=async(req,res)=>{
+  try{
+    const userId=req.id;
+    const name=req.name;
+    const profilePhoto=req.file;
+
+    const user=await user.findById(userId);
+    if(!user){
+      return res.status(404).json({
+        success:false,
+        message:"User Not Found"
+      })
+    }
+  }
+  catch(err){
+    return res.status(500).json({
+      success:false,
+      message:"Failed to update profile"
+  })
+}
+}

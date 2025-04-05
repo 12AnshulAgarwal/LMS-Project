@@ -19,14 +19,15 @@ import { useLoadUserQuery } from "@/features/api/authApi";
 const Profile = () => {
   const { data, isLoading } = useLoadUserQuery();
   console.log(data);
-  const enrolledCourses = [1, 2];
+  if (isLoading) return <h1>Profile Loading...</h1>;
+  const { user } = data;
   return (
     <div className="max-w-4xl mx-auto px-4 my-24">
       <h1 className="font-bold text-2xl text-center md:text-left">PROFILE</h1>
       <div className=" flex flex-col md:flex-row items-center md:items-start gap-8 my-5">
         <div>
           <Avatar className="h-24 w-24 md:h-32 md:w-32 mb-4">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarImage src={ user.photourl || "https://github.com/shadcn.png"} alt="@shadcn" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </div>
@@ -35,7 +36,7 @@ const Profile = () => {
             <h1 className="font font-semibold text-gray-900 dark:text-gray-100">
               Name:
               <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                Anshul Mernstack
+                {user.name}
               </span>
             </h1>
           </div>
@@ -43,7 +44,7 @@ const Profile = () => {
             <h1 className="font font-semibold text-gray-900 dark:text-gray-100">
               Email:
               <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                anshulag.cse@gmail.com
+                {user.email}
               </span>
             </h1>
           </div>
@@ -51,7 +52,7 @@ const Profile = () => {
             <h1 className="font font-semibold text-gray-900 dark:text-gray-100">
               Role:
               <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                Instructor
+                {user.role.toUpperCase()}
               </span>
             </h1>
           </div>
@@ -106,10 +107,10 @@ const Profile = () => {
       <div>
         <h1 className="font-medium text-lg">Courses you're enrolled in</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-5">
-          {enrolledCourses.length === 0 ? (
+          {user.enrolledCourse.length === 0 ? (
             <h1>You have'nt Enrolled Yet</h1>
           ) : (
-            enrolledCourses.map((course, index) => <Course key={index} />)
+            user.enrolledCourse.map((course) => <Course course={course} key={course._id} />)
           )}
         </div>
       </div>
