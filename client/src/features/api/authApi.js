@@ -32,15 +32,44 @@ const authApi = createApi({
         }
       },
     }),
-   loadUser:builder.query({
-    query:()=>({
-      url: "profile",
-      method: "GET",
-    })
-   })
+
+    logoutUser: builder.mutation({
+      query: () => ({
+        url: "logout",
+        method: "GET",
+      }),
+    }),
+    loadUser: builder.query({
+      query: () => ({
+        url: "profile",
+        method: "GET",
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          dispatch(userLoggedIn({ user: result.data.user }));
+        } catch (err) {
+          console.error("Login error:", err);
+        }
+      },
+    }),
+    editUser: builder.mutation({
+      query: (formData) => ({
+        url: "/Profile/update",
+        method: "PUT",
+        body: formData,
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
 // ✅ Ensure correct export names (camelCase)
-export const { useRegisterUserMutation, useLoginUserMutation ,useLoadUserQuery} = authApi;
+export const {
+  useRegisterUserMutation,
+  useLoginUserMutation,
+  useLogoutUserMutation,
+  useLoadUserQuery,
+  useEditUserMutation,
+} = authApi;
 export default authApi;

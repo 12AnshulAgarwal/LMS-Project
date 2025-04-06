@@ -31,9 +31,23 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import DarkMode from "@/DarkMode";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useEffect } from "react";
+import { useLogoutUserMutation } from "@/features/api/authApi";
+import { toast } from "sonner";
 const Navbar = () => {
   const user = true;
+  const [logoutUser, { isSuccess, data }] = useLogoutUserMutation();
+  const navigate=useNavigate();
+  const logoutHandler=async()=>{
+    await logoutUser();
+  }
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data.message || "User Logged Out");
+      navigate("/login");
+    }
+  }, [isSuccess]);
   return (
     <div className="h-16 dark:bg-[#020817] dark:border-b-gray-800 bg-white border-b-gray-200 fixed top-0 left-0 right-0 z-10 duration-300">
       <div className="max-w-7xl mx-auto hidden md:flex justify-between items-center gap-10 h-full">
@@ -59,12 +73,16 @@ const Navbar = () => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem><Link to="my-learning">My learning</Link></DropdownMenuItem>
-                  <DropdownMenuItem><Link to="profile">Edit Profile</Link></DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="my-learning">My learning</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="profile">Edit Profile</Link>
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem>Log out</DropdownMenuItem>
+                <DropdownMenuItem onClick={logoutHandler}>Log out</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Dashboard</DropdownMenuItem>
               </DropdownMenuContent>
