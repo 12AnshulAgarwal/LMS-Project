@@ -35,13 +35,14 @@ import { Link, useNavigate } from "react-router";
 import { useEffect } from "react";
 import { useLogoutUserMutation } from "@/features/api/authApi";
 import { toast } from "sonner";
+import { useSelector } from "react-redux";
 const Navbar = () => {
-  const user = true;
+  const { user } = useSelector((store) => store.auth);
   const [logoutUser, { isSuccess, data }] = useLogoutUserMutation();
-  const navigate=useNavigate();
-  const logoutHandler=async()=>{
+  const navigate = useNavigate();
+  const logoutHandler = async () => {
     await logoutUser();
-  }
+  };
   useEffect(() => {
     if (isSuccess) {
       toast.success(data.message || "User Logged Out");
@@ -63,7 +64,7 @@ const Navbar = () => {
               <DropdownMenuTrigger asChild>
                 <Avatar>
                   <AvatarImage
-                    src="https://github.com/shadcn.png"
+                    src={user?.photourl || "https://github.com/shadcn.png"}
                     alt="@shadcn"
                   />
                   <AvatarFallback>CN</AvatarFallback>
@@ -80,17 +81,24 @@ const Navbar = () => {
                     <Link to="profile">Edit Profile</Link>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
+                {user.role === "instructor" && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                  </>
+                )}
                 <DropdownMenuSeparator />
-
-                <DropdownMenuItem onClick={logoutHandler}>Log out</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                <DropdownMenuItem onClick={logoutHandler}>
+                  Log out
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button>SignUp</Button>
-              <Button>Login</Button>
+              <Button onClick={() => navigate("/login")}>SignUp</Button>
+              <Button variant="outline" onClick={() => navigate("/login")}>
+                Login
+              </Button>
             </div>
           )}
           <DarkMode />
