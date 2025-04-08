@@ -110,7 +110,7 @@ export const profile = async (req, res) => {
 export const editProfile = async (req, res) => {
   try {
     const userId = req.id;
-    const {name} = req.body;
+    const { name } = req.body;
     const profilePhoto = req.file;
 
     const user = await User.findById(userId);
@@ -127,18 +127,19 @@ export const editProfile = async (req, res) => {
     }
 
     //upload new photo
-    const cloudResponse=await uploadMedia(profilePhoto.path);
-    const UpdatedUrl=cloudResponse.secure_url;
+    const cloudResponse = await uploadMedia(profilePhoto.path);
+    const UpdatedUrl = cloudResponse.secure_url;
 
     const updatedData = { name, photourl: UpdatedUrl }; // ✅ correct key
-    const updatedUser=await User.findByIdAndUpdate(userId,updatedData,{new:true}).select("-password");
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
+      new: true,
+    }).select("-password");
 
     return res.status(200).json({
-      success:true,
-      message:"User Profile Updated Successfully",
-      user:updatedUser
-    })
-
+      success: true,
+      message: "User Profile Updated Successfully",
+      user: updatedUser,
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,
