@@ -2,29 +2,42 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useCreateCourseMutation } from "@/features/api/courseApi";
 import { Loader2 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 const AddCourse = () => {
-    const [courseTitle,setCourseTitle]=useState("");
-    const [Category,setCategory]=useState("");
-    const navigate=useNavigate();
-    const isLoading=false;
+  const [courseTitle, setCourseTitle] = useState("");
+  const [category, setCategory] = useState("");
 
-    const getSelectedCategory=(value)=>{
-        setCategory(value);
+  const [createCourse, { data, isLoading, error, isSuccess }] =
+    useCreateCourseMutation();
+  const navigate = useNavigate();
+
+  const getSelectedCategory = (value) => {
+    setCategory(value);
+  };
+  const createCourseHandler = async () => {
+    console.log({ courseTitle, category });
+    await createCourse({ courseTitle, category });
+  };
+
+  //for displaying toast
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data?.message || "Course Created");
+      navigate("/admin/course");
     }
-    const createCourseHandler=async()=>{
-        console.log(courseTitle,Category)
-    }
+  }, [isSuccess, error]);
   return (
     <div className="flex-1 mx-10">
       <div className="mb-4">
@@ -40,7 +53,7 @@ const AddCourse = () => {
           <Input
             type="text"
             value={courseTitle}
-            onChange={(e)=>setCourseTitle(e.target.value)}
+            onChange={(e) => setCourseTitle(e.target.value)}
             placeholder="Your Course Name"
           />
         </div>
@@ -74,17 +87,19 @@ const AddCourse = () => {
           </Select>
         </div>
         <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={()=>navigate("/admin/course")}>Back</Button>
-            <Button disabled={isLoading} onClick={createCourseHandler}>
-                {
-                    isLoading?(
-                        <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
-                        Please Wait
-                        </>
-                    ):"Create"
-                }
-            </Button>
+          <Button variant="outline" onClick={() => navigate("/admin/course")}>
+            Back
+          </Button>
+          <Button disabled={isLoading} onClick={createCourseHandler}>
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please Wait
+              </>
+            ) : (
+              "Create"
+            )}
+          </Button>
         </div>
       </div>
     </div>

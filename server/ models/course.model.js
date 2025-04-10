@@ -47,6 +47,6 @@ const courseSchema=new mongoose.Schema({
             type:Boolean,
             default:false
         }
-},{timestamp:true});
+},{timestamps:true});
 
 export const Course=mongoose.model("Course",courseSchema);
