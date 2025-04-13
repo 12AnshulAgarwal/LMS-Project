@@ -1,7 +1,7 @@
 import { Button } from "./components/ui/button";
 import "./App.css";
 import Login from "./pages/login";
-import Navbar from "./components/ui/Navbar";
+import Navbar from "./components/Navbar";
 import HeroSection from "./pages/student/HeroSection";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import MainLayout from "./layout/MainLayout";
@@ -13,6 +13,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import Course from "./pages/student/Course";
 import CourseTable from "./pages/admin/course/CourseTable";
 import AddCourse from "./pages/admin/course/AddCourse";
+import EditCourse from "./pages/admin/course/EditCourse";
 
 const appRouter = createBrowserRouter([
   {
@@ -24,7 +25,7 @@ const appRouter = createBrowserRouter([
         element: (
           <>
             <HeroSection />
-            <Courses/>
+            <Courses />
           </>
         ),
       },
@@ -43,29 +44,33 @@ const appRouter = createBrowserRouter([
       //admin routes start here
       {
         path: "admin",
-        element: <Sidebar/>,
-        children:[
+        element: <Sidebar />,
+        children: [
           {
-            path:"dashboard",
-            element:<Dashboard/>
+            path: "dashboard",
+            element: <Dashboard />,
           },
           {
-            path:"course",
-            element:<CourseTable/>
+            path: "course",
+            element: <CourseTable />,
           },
           {
-            path:"course/create",
-            element:<AddCourse/>
+            path: "course/create",
+            element: <AddCourse />,
           },
-        ]
-      }
+          {
+            path: "course/:courseId",
+            element: <EditCourse />,
+          },
+        ],
+      },
     ],
   },
 ]);
 function App() {
   return (
     <main>
-      <RouterProvider router={appRouter}/>
+      <RouterProvider router={appRouter} />
     </main>
   );
 }
