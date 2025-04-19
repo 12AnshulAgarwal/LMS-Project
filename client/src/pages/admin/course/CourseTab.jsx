@@ -18,11 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-const [previewthumbnail,setpreviewthumbnail]=useState(" ");
 import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 const CourseTab = () => {
+  const [previewthumbnail, setpreviewthumbnail] = useState();
   const [input, setInput] = useState({
     courseTitle: "",
     subTitle: "",
@@ -45,16 +45,19 @@ const CourseTab = () => {
     setInput({ ...input, courseLevel: value });
   };
   //get file
- const selectthumbnail=(e)=>{
-    const file=e.target.file?.[0];
-    if(file){
-        setInput({...input,coursethumbnail:file});
-        const fileReader=new FileReader();
-        fileReader.onloadend=()=>setpreviewthumbnail(fileReader.result);
-        fileReader.readAsDataURL(file);
+  const selectthumbnail = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setInput({ ...input, coursethumbnail: file });
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => setpreviewthumbnail(fileReader.result);
+      fileReader.readAsDataURL(file);
     }
-
- }
+  };
+  const updatecourseHandler=()=>{
+    console.log("Course Description:", input.courseDescription);
+    console.log(input);
+  }
   const isloading = false;
   const isPublished = true;
   return (
@@ -159,20 +162,25 @@ const CourseTab = () => {
           </div>
           <div>
             <Label>Course Thumbnail</Label>
-            <Input type="file" onChange={selectthumbnail} accept="images/*" className="w-fit" />
-            {previewthumbnail&&(
-                <img
+            <Input
+              type="file"
+              onChange={selectthumbnail}
+              accept="images/*"
+              className="w-fit"
+            />
+            {previewthumbnail && (
+              <img
                 src={previewthumbnail}
                 className="e-64 my-2"
                 alt="Course Thumnail"
-                />
+              />
             )}
           </div>
           <div>
             <Button onClick={() => navigate("/admin/course")} variant="outline">
               Cancel
             </Button>
-            <Button disabled={isloading}>
+            <Button disabled={isloading} onClick={updatecourseHandler}>
               {isloading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

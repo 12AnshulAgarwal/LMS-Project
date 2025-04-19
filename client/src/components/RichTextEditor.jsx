@@ -121,10 +121,12 @@ const LexicalEditor = ({ input, setInput }) => {
   const onChange = () => {
     const editorElement = document.querySelector('[contenteditable="true"]');
     if (editorElement) {
-      const html = editorElement.innerHTML;
-      setInput({ ...input, description: html });
+      // Get the plain text content (without HTML tags)
+      const plainText = editorElement.innerText || editorElement.textContent;
+      setInput({ ...input, courseDescription: plainText });
     }
   };
+  
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
