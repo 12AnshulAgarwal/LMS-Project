@@ -13,39 +13,44 @@ import {
 import { useCreateCourseMutation } from "@/features/api/courseApi";
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+
 const AddCourse = () => {
   const [courseTitle, setCourseTitle] = useState("");
   const [category, setCategory] = useState("");
 
   const [createCourse, { data, isLoading, error, isSuccess }] =
     useCreateCourseMutation();
+
   const navigate = useNavigate();
 
   const getSelectedCategory = (value) => {
     setCategory(value);
   };
+
   const createCourseHandler = async () => {
-    console.log({ courseTitle, category });
     await createCourse({ courseTitle, category });
   };
 
-  //for displaying toast
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success(data?.message || "Course Created");
-      navigate("/admin/course");
+  // for displaying toast
+  useEffect(()=>{
+    if(isSuccess){
+        toast.success(data?.message || "Course created.");
+        navigate("/admin/course");
     }
-  }, [isSuccess, error]);
+  },[isSuccess, error])
+
   return (
     <div className="flex-1 mx-10">
       <div className="mb-4">
         <h1 className="font-bold text-xl">
-          Lets add some more courses,add some basic course details for your new
-          course
+          Lets add course, add some basic course details for your new course
         </h1>
-        <p className="text-sm">lorem ipsum pipsum xaboueufbwubfoubofw</p>
+        <p className="text-sm">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Possimus,
+          laborum!
+        </p>
       </div>
       <div className="space-y-4">
         <div>
@@ -61,7 +66,7 @@ const AddCourse = () => {
           <Label>Category</Label>
           <Select onValueChange={getSelectedCategory}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select a fruit" />
+              <SelectValue placeholder="Select a category" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -94,7 +99,7 @@ const AddCourse = () => {
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please Wait
+                Please wait
               </>
             ) : (
               "Create"
@@ -105,4 +110,5 @@ const AddCourse = () => {
     </div>
   );
 };
+
 export default AddCourse;

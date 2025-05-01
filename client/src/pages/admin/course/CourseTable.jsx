@@ -1,5 +1,5 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import React from "react";
 import {
   Table,
   TableBody,
@@ -10,10 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useNavigate } from "react-router";
-import { useGetCourseQuery } from "@/features/api/courseApi";
-import { Badge } from "@/components/ui/badge";
+import { useGetCreatorCourseQuery } from "@/features/api/courseApi";
 import { Edit } from "lucide-react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const invoices = [
   {
@@ -59,11 +59,13 @@ const invoices = [
     paymentMethod: "Credit Card",
   },
 ];
+
 const CourseTable = () => {
-  const { data, isLoading } = useGetCourseQuery();
+    const {data, isLoading} = useGetCreatorCourseQuery();
   const navigate = useNavigate();
-  if (isLoading) return <h1>Loading...</h1>;
-  console.log("data ->",data);
+
+  if(isLoading) return <h1>Loading...</h1>
+ 
   return (
     <div>
       <Button onClick={() => navigate(`create`)}>Create a new course</Button>
@@ -78,13 +80,13 @@ const CourseTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.Courses.map((Course) => (
-            <TableRow key={Course._id}>
-              <TableCell className="font-medium">{Course?.coursePrice||"NA"}</TableCell>
-              <TableCell><Badge>{Course.isPublished?"Published":"Draft"}</Badge></TableCell>
-              <TableCell>{Course.courseTitle}</TableCell>
+          {data.courses.map((course) => (
+            <TableRow key={course._id}>
+              <TableCell className="font-medium">{course?.coursePrice || "NA"}</TableCell>
+              <TableCell> <Badge>{course.isPublished ? "Published" : "Draft"}</Badge> </TableCell>
+              <TableCell>{course.courseTitle}</TableCell>
               <TableCell className="text-right">
-                <Button size='sm' variant='ghost' onClick={()=>navigate(`${Course._id}`)}><Edit/></Button>
+                 <Button size='sm' variant='ghost' onClick={() => navigate(`${course._id}`)}><Edit/></Button>
               </TableCell>
             </TableRow>
           ))}
@@ -93,4 +95,5 @@ const CourseTable = () => {
     </div>
   );
 };
+
 export default CourseTable;
